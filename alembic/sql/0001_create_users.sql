@@ -1,0 +1,1 @@
+insert into users (email, last_logon, role) values ('mathias.kluba@gmail.com', now(), 'admin');
