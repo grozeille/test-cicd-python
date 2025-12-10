@@ -1,0 +1,26 @@
+"""create users table
+
+Revision ID: 0002
+Revises: 
+Create Date: ***
+"""
+from alembic import op
+import sqlalchemy as sa
+import os
+
+revision = '0002'
+down_revision = '0001'
+branch_labels = None
+depends_on = None
+
+def upgrade() -> None:
+    op.add_column(
+        'users',
+        sa.Column('firstname', sa.String(length=255), nullable=True, unique=False)
+    )
+
+
+
+def downgrade() -> None:
+    # TODO
+    return

@@ -1,6 +1,6 @@
 """create users table
 
-Revision ID: 0001
+Revision ID: 0000
 Revises: 
 Create Date: 2025-11-20 00:00:00.000000
 """
@@ -8,8 +8,8 @@ from alembic import op
 import sqlalchemy as sa
 import os
 
-revision = '0001'
-down_revision = '0000'
+revision = '0000'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -20,8 +20,10 @@ def _read_sql(name):
         return f.read()
 
 def upgrade() -> None:
-    op.execute(_read_sql('0001_create_users.sql'))
+    
+    op.execute(_read_sql('0000_init.sql'))
+    return
 
 
 def downgrade() -> None:
-    op.drop_table('users')
+    return
