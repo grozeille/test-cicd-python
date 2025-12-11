@@ -1,12 +1,5 @@
-"""create users table
-
-Revision ID: 0002
-Revises: 
-Create Date: ***
-"""
 from alembic import op
 import sqlalchemy as sa
-import os
 
 revision = '0002'
 down_revision = '0001'
@@ -22,5 +15,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    # TODO
+    op.drop_column('users', 'firstname')
     return
