@@ -1,0 +1,49 @@
+name: Trigger auto deployment for demopython
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/demopython-AutoDeployTrigger-6b8f16f2-efb1-4f34-980c-274233508062.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.DEMOPYTHON_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.DEMOPYTHON_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.DEMOPYTHON_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          _targetLabelKey_: _targetLabel_
+          registryUrl: 
+          registryUsername: ${{ secrets.DEMOPYTHON_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.DEMOPYTHON_REGISTRY_PASSWORD }}
+          containerAppName: demopython
+          resourceGroup: demopython
+          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
